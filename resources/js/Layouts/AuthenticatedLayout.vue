@@ -78,7 +78,7 @@ const showingNavigationDropdown = ref(false);
                                         </DropdownLink>
                                         <DropdownLink
                                             v-if="$page.props.auth.user.is_admin == 1"
-                                            :href="route('genders.index')"
+                                            :href="route('admin.genders.index')"
                                         >
                                             Gender
                                         </DropdownLink>
@@ -175,7 +175,7 @@ const showingNavigationDropdown = ref(false);
                             </ResponsiveNavLink>
                             <ResponsiveNavLink
                                 v-if="$page.props.auth.user.is_admin == 1" 
-                                :href="route('genders.index')"
+                                :href="route('admin.genders.index')"
                             >
                                 Gender
                             </ResponsiveNavLink>

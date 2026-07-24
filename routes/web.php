@@ -6,7 +6,7 @@ use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
 //Controllers da Administração
-use App\Http\Controllers\GenderController;
+use App\Http\Controllers\Admin\GenderController;
 
 Route::get('/', function () {
     return Inertia::render('Welcome', [
@@ -28,7 +28,7 @@ Route::middleware('auth')->group(function () {
 });
 
 //Adicionando a rota para a página de administração
-Route::middleware(['auth', 'admin'])->group(function () {
+Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(function () {
     Route::get('/genders', [GenderController::class, 'index'])->name('genders.index');
     Route::post('/genders', [GenderController::class, 'store'])->name('genders.store');
     Route::put('/genders/{gender}', [GenderController::class, 'update'])->name('genders.update');
