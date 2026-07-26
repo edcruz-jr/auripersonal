@@ -18,7 +18,10 @@ const submitEmail = () => {
 
     <div class="min-h-screen bg-white font-sans text-gray-900 selection:bg-black selection:text-bg-brand-dark">
         <section class="relative flex min-h-[85vh] flex-col items-center justify-center bg-brand-neon px-4 py-20 text-center">
-            <div class="absolute right-6 top-6 sm:right-10 sm:top-10">
+            <div class="flex gap-2 absolute right-6 top-6 sm:right-9 sm:top-9">
+                <Link :href="route('register')" class="rounded-full bg-black px-6 p-3 text-sm font-bold text-white transition hover:bg-brand-dark">
+                    Registrar
+                </Link>
                 <Link :href="route('login')" class="rounded-full bg-black px-6 p-3 text-sm font-bold text-white transition hover:bg-brand-dark">
                     Login
                 </Link>
