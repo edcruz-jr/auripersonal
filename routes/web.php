@@ -8,10 +8,6 @@ use Inertia\Inertia;
 //Controllers da Administração
 use App\Http\Controllers\Admin\GenderController;
 
-Route::get('/legal/terms', function () {
-    return Inertia::render('Legal/TermsOfService');
-})->name('terms');
-
 Route::get('/', function () {
     return Inertia::render('Welcome', [
         'canLogin' => Route::has('login'),
@@ -29,6 +25,17 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+});
+
+// Adicionando o agrupamento para as rotas Jurídicas
+Route::prefix('legal')->name('legal.')->group(function () {
+    Route::get('/terms', function () {
+        return Inertia::render('Legal/TermsOfService');
+    })->name('terms');
+
+    Route::get('/privacyPolicy', function () {
+        return Inertia::render('Legal/PrivacyPolicy');
+    })->name('privacy_policy');
 });
 
 //Adicionando a rota para a página de administração
