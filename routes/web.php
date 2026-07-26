@@ -8,6 +8,10 @@ use Inertia\Inertia;
 //Controllers da Administração
 use App\Http\Controllers\Admin\GenderController;
 
+Route::get('/legal/terms', function () {
+    return Inertia::render('TermsService');
+})->name('terms');
+
 Route::get('/', function () {
     return Inertia::render('Welcome', [
         'canLogin' => Route::has('login'),

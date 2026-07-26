@@ -136,7 +136,7 @@ const submitEmail = () => {
                 <p>© Auri Souza Personal 2026</p>
                 <div class="flex gap-4">
                     <Link href="#" class="hover:text-white">Política de Privacidade</Link>
-                    <Link href="#" class="hover:text-white">Termos de Serviço</Link>
+                    <Link :href="route('terms')" class="hover:text-white">Termos de Serviço</Link>
                 </div>
             </div>
         </footer>
