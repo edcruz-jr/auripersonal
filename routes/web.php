@@ -9,7 +9,7 @@ use Inertia\Inertia;
 use App\Http\Controllers\Admin\GenderController;
 
 Route::get('/legal/terms', function () {
-    return Inertia::render('TermsService');
+    return Inertia::render('Legal/TermsOfService');
 })->name('terms');
 
 Route::get('/', function () {
