@@ -31,7 +31,7 @@ const confirmGenderDeletion = () => {
 }
 
 const deleteGender = () => {    
-    form.delete(route('genders.destroy'), {
+    form.delete(route('admin.genders.destroy'), {
         preserveScroll: true,
         onSuccess: () => {
             form.reset(),

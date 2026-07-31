@@ -139,6 +139,9 @@ const submit = () => {
                     <option value="1">Perda de Peso</option>
                     <option value="2">Ganho de Massa Muscular</option>
                     <option value="3">Manutenção</option>
+                    <option value="4">Qualidade de Vida</option>
+                    <option value="5">Quebra da Barreira de Hipertrofia em 60 dias</option>
+                    <option value="6">Corrida de rua</option>
                 </select>
 
                 <InputError class="mt-2" :message="form.errors.main_objective_id" />

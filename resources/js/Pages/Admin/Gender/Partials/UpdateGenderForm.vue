@@ -19,7 +19,7 @@ const updateGender = () => {
         return;
     }
     
-    form.put(route('genders.update', form.current_gender), {
+    form.put(route('admin.genders.update', form.current_gender), {
         preserveScroll: true,
         onSuccess: () => form.reset(),
         onError: () => form.reset('current_gender')

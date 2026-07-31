@@ -14,7 +14,7 @@ const createGender = () => {
         return;
     }
     
-    form.post(route('genders.store'), {
+    form.post(route('admin.genders.store'), {
         preserveScroll: true,
         onSuccess: () => form.reset(),
         onError: () => form.reset('new_gender')
