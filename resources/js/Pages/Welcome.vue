@@ -7,10 +7,6 @@ import { ref } from 'vue';
 const form = ref({
     email: ''
 });
-
-const submitEmail = () => {
-    console.log('E-mail enviado:', form.value.email);
-};
 </script>
 
 <template>
