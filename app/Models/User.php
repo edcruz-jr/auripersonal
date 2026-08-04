@@ -17,6 +17,7 @@ use Illuminate\Notifications\Notifiable;
     'birth_date',
     'gender_id',
     'height',
+    'weight',
     'main_objective_id',
     'activity_level_id',
     'dietary_restrictions',

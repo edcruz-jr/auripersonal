@@ -3,7 +3,7 @@ import InputError from '@/Components/InputError.vue';
 import InputLabel from '@/Components/InputLabel.vue';
 import TextInput from '@/Components/TextInput.vue';
 import { Head, Link, useForm } from '@inertiajs/vue3';
-import { ref, computed } from 'vue';
+import { ref, computed, nextTick } from 'vue';
 
 const form = useForm({
     full_name: '',
@@ -56,6 +56,53 @@ const clearError = (field) => {
 
 const validateStep = () => {
     localErrors.value = {};
+
+    if (currentStep.value === 0 && form.full_name) {
+        if (form.full_name.length < 10) {
+            localErrors.value.full_name = 'O nome completo deve ter pelo menos 10 caracteres.';
+            return false;
+        }
+    }
+    if (currentStep.value === 0 && form.email) {
+        const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailPattern.test(form.email)) {
+            localErrors.value.email = 'O e-mail deve ser válido.';
+            return false;
+        }
+    }
+    if (currentStep.value === 0 && form.phone_number) {
+        const phonePattern = /^\(?\d{2}\)?[\s-]?\d{4,5}-?\d{4}$/;
+        if (!phonePattern.test(form.phone_number)) {
+            localErrors.value.phone_number = 'O telefone deve ser válido.';
+            return false;
+        }
+    }
+    if (currentStep.value === 0 && form.birth_date) {
+        const birthDate = new Date(form.birth_date);
+        const today = new Date();
+        const age = today.getFullYear() - birthDate.getFullYear();
+        const monthDiff = today.getMonth() - birthDate.getMonth();
+        if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
+            age--;
+        }
+        if (age < 10) {
+            localErrors.value.birth_date = 'Você deve ter pelo menos 10 anos.';
+            return false;
+        }
+    }
+    if (currentStep.value === 1 && form.height) {
+        if (form.height <= 0 || form.height > 300) {
+            localErrors.value.height = 'A altura deve ser um valor positivo e menor que 300 cm.';
+            return false;
+        }
+    }
+    if (currentStep.value === 1 && form.weight) {
+        if (form.weight <= 0 || form.weight > 300) {
+            localErrors.value.weight = 'O peso deve ser um valor positivo e menor que 300 kg.';
+            return false;
+        }
+    }
+
     const stepFields = steps[currentStep.value].fields;
     const requiredFields = stepFields.filter(f =>
         f !== 'dietary_restrictions' &&
@@ -63,20 +110,49 @@ const validateStep = () => {
         f !== 'gender_id'
     );
     let valid = true;
-
     for (const field of requiredFields) {
         if (!form[field] || form[field] === '') {
             localErrors.value[field] = 'Este campo é obrigatório.';
             valid = false;
         }
     }
-
     if (currentStep.value === 2 && form.password && form.password !== form.password_confirmation) {
         localErrors.value.password_confirmation = 'As senhas não coincidem.';
         valid = false;
     }
-
     return valid;
+};
+
+const focusFirstErrorField = (stepIndex) => {
+    for (const field of steps[stepIndex].fields) {
+        if (form.errors[field] || localErrors.value[field]) {
+            const el = document.getElementById(field);
+            if (el) {
+                el.focus();
+                el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }
+            break;
+        }
+    }
+};
+
+const goToFirstErrorStep = () => {
+    for (let i = 0; i < steps.length; i++) {
+        const hasError = steps[i].fields.some(field => form.errors[field]);
+        if (hasError) {
+            if (currentStep.value !== i) {
+                currentStep.value = i;
+                // Aguarda a transição do <Transition> completar (300ms) + render do DOM
+                nextTick(() => {
+                    setTimeout(() => focusFirstErrorField(i), 350);
+                });
+            } else {
+                // Já está no passo certo, só foca o campo
+                nextTick(() => focusFirstErrorField(i));
+            }
+            break;
+        }
+    }
 };
 
 const nextStep = () => {
@@ -98,6 +174,9 @@ const submit = () => {
 
     form.post(route('register'), {
         onFinish: () => form.reset('password', 'password_confirmation'),
+        onError: () => {
+            goToFirstErrorStep();
+        },
     });
 };
 </script>
@@ -180,6 +259,8 @@ const submit = () => {
                                     class="mt-2 block w-full rounded-xl border-gray-200 bg-gray-50 shadow-sm transition focus:border-[#00ff7f] focus:bg-white focus:ring focus:ring-[#00ff7f]/30"
                                     v-model="form.full_name"
                                     required
+                                    minlength="10"
+                                    maxlength="255"
                                     autofocus
                                     autocomplete="full_name"
                                     placeholder="Seu nome completo"
@@ -239,7 +320,7 @@ const submit = () => {
                                         v-model="form.gender_id"
                                         @change="clearError('gender_id')"
                                     >
-                                        <option value="">Selecione</option>
+                                        <option value="" disabled selected>Selecione</option>
                                         <option value="1">Masculino</option>
                                         <option value="2">Feminino</option>
                                     </select>
@@ -258,6 +339,7 @@ const submit = () => {
                                     class="mt-2 block w-full rounded-xl border-gray-200 bg-gray-50 shadow-sm transition focus:border-[#00ff7f] focus:bg-white focus:ring focus:ring-[#00ff7f]/30"
                                     v-model="form.height"
                                     required
+                                    max="300"
                                     min="0"
                                     placeholder="Ex: 175"
                                     @input="clearError('height')"
@@ -272,6 +354,7 @@ const submit = () => {
                                     type="number"
                                     class="mt-2 block w-full rounded-xl border-gray-200 bg-gray-50 shadow-sm transition focus:border-[#00ff7f] focus:bg-white focus:ring focus:ring-[#00ff7f]/30"
                                     v-model="form.weight"
+                                    max="300"
                                     min="0"
                                     placeholder="Ex: 70.5"
                                     @input="clearError('weight')"
