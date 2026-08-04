@@ -196,9 +196,9 @@ const submit = () => {
 
             <div class="relative z-10 flex h-full flex-col justify-between p-12">
                 <!-- Topo -->
-                <div class="flex items-center gap-2 font-bold uppercase tracking-widest text-white/80">
-                    <span class="text-sm">Auri Souza Personal</span>
-                </div>
+                <Link href="/" class="text-xs font-bold uppercase tracking-widest text-white/80 hover:text-[#00ff7f] transition">
+                    Auri Souza Personal
+                </Link>
 
                 <!-- Centro -->
                 <div>
@@ -213,6 +213,12 @@ const submit = () => {
                 <!-- Rodapé -->
                 <div class="flex items-center gap-3 text-white/40">
                     <span class="text-xs">© Auri Souza Personal 2026</span>
+                    <Link :href="route('legal.privacy_policy')" class="text-xs text-white/40 hover:text-[#00ff7f] transition">
+                        Política de Privacidade
+                    </Link>
+                    <Link :href="route('legal.terms')" class="text-xs text-white/40 hover:text-[#00ff7f] transition">
+                        Termos de Serviço
+                    </Link>
                 </div>
             </div>
         </div>

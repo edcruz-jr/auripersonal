@@ -28,7 +28,7 @@ import { Head, Link } from '@inertiajs/vue3';
                     <div class="flex justify-between">
                         <h1 class="text-3xl font-bold text-brand-dark mb-2">Política de Privacidade</h1>
                         <Link
-                            :href="route('login')"
+                            href="/"
                         >
                             <span class="text-xl font-bold">X</span>
                         </Link>
