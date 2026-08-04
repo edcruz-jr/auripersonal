@@ -39,6 +39,7 @@ class RegisteredUserController extends Controller
             'birth_date' => 'required|date',
             'gender_id' => 'required|exists:genders,id',
             'height' => 'required|numeric|min:0',
+            'weight' => 'nullable|numeric|min:0',
             'main_objective_id' => 'required|exists:main_objectives,id',
             'activity_level_id' => 'required|exists:activity_levels,id',
             'dietary_restrictions' => 'nullable|string|max:255',

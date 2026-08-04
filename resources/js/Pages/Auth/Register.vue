@@ -12,6 +12,7 @@ const form = useForm({
     birth_date: '',
     gender_id: '',
     height: '',
+    weight: '',
     main_objective_id: '',
     activity_level_id: '',
     dietary_restrictions: '',
@@ -31,7 +32,7 @@ const steps = [
     {
         title: 'Perfil Físico',
         subtitle: 'Seus objetivos e rotina',
-        fields: ['height', 'main_objective_id', 'activity_level_id', 'dietary_restrictions'],
+        fields: ['height', 'weight', 'main_objective_id', 'activity_level_id', 'dietary_restrictions'],
     },
     {
         title: 'Segurança',
@@ -56,7 +57,11 @@ const clearError = (field) => {
 const validateStep = () => {
     localErrors.value = {};
     const stepFields = steps[currentStep.value].fields;
-    const requiredFields = stepFields.filter(f => f !== 'dietary_restrictions' && f !== 'phone_number'); // Optional fields
+    const requiredFields = stepFields.filter(f =>
+        f !== 'dietary_restrictions' &&
+        f !== 'phone_number' &&
+        f !== 'gender_id'
+    );
     let valid = true;
 
     for (const field of requiredFields) {
@@ -258,6 +263,20 @@ const submit = () => {
                                     @input="clearError('height')"
                                 />
                                 <InputError class="mt-2" :message="getError('height')" />
+                            </div>
+
+                            <div>
+                                <InputLabel for="weight" value="Peso (kg)" class="text-sm font-bold text-black" />
+                                <TextInput
+                                    id="weight"
+                                    type="number"
+                                    class="mt-2 block w-full rounded-xl border-gray-200 bg-gray-50 shadow-sm transition focus:border-[#00ff7f] focus:bg-white focus:ring focus:ring-[#00ff7f]/30"
+                                    v-model="form.weight"
+                                    min="0"
+                                    placeholder="Ex: 70.5"
+                                    @input="clearError('weight')"
+                                />
+                                <InputError class="mt-2" :message="getError('weight')" />
                             </div>
 
                             <div>

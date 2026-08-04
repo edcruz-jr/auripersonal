@@ -39,6 +39,7 @@ return new class extends Migration
             $table->date('birth_date');
             $table->unsignedBigInteger('gender_id')->nullable();
             $table->integer('height');
+            $table->float('weight', 10, 2)->nullable();
             $table->unsignedBigInteger('main_objective_id')->nullable();
             $table->unsignedBigInteger('activity_level_id');
             $table->string('dietary_restrictions')->nullable();
