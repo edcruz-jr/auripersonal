@@ -28,10 +28,10 @@ const verificationLinkSent = computed(
 
         <!-- Ícone -->
         <div class="mb-6 flex justify-center">
-            <div class="flex h-16 w-16 items-center justify-center rounded-full bg-[#00ff7f]/10">
+            <div class="flex h-16 w-16 items-center justify-center rounded-full bg-brand-neon_green/10">
                 <svg
                     xmlns="http://www.w3.org/2000/svg"
-                    class="h-8 w-8 text-[#00ff7f]"
+                    class="h-8 w-8 text-brand-neon_green"
                     fill="none"
                     viewBox="0 0 24 24"
                     stroke="currentColor"
@@ -60,9 +60,9 @@ const verificationLinkSent = computed(
         <!-- Mensagem de reenvio -->
         <div
             v-if="verificationLinkSent"
-            class="mb-6 rounded-xl bg-[#00ff7f]/10 px-4 py-3 text-center"
+            class="mb-6 rounded-xl bg-brand-neon_green/10 px-4 py-3 text-center"
         >
-            <p class="text-sm font-bold text-[#00cc65]">
+            <p class="text-sm font-bold text-brand-neon_green">
                 Link reenviado! Verifique sua caixa de entrada e spam.
             </p>
         </div>

@@ -18,6 +18,7 @@ export default {
             colors: {
                 brand: {
                     neon: '#d4ff00',
+                    neon_green: "#00ff7f",
                     darkest: '#0F1D26',  // O tom mais escuro, ótimo para rodapés ou textos principais
                     dark: '#162C40',     // Azul marinho profundo, excelente para fundos de seções e navegação
                     primary: '#254559',  // Cor principal, boa para botões de destaque ou headers
