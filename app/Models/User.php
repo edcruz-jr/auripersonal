@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Contracts\Auth\MustVerifyEmail;
+use App\Notifications\CustomVerifyEmail; 
 use Database\Factories\UserFactory;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Attributes\Hidden;
@@ -36,6 +37,11 @@ class User extends Authenticatable implements MustVerifyEmail
      * @return array<string, string>
      */
     protected $dateFormat = 'Ymd H:i:s';
+
+    public function sendEmailVerificationNotification()
+    {
+        $this->notify(new CustomVerifyEmail($this->getEmailForVerification()));
+    }
 
     protected function casts(): array
     {
