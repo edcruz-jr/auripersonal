@@ -17,7 +17,6 @@ class CustomVerifyEmail extends VerifyEmail
 
     protected function verificationUrl($notifiable)
     {
-        $prefix = config('app.url') . '/verify-email';
         $temporarySignedURL = URL::temporarySignedRoute(
             'verification.verify',
             Carbon::now()->addMinutes(Config::get('auth.verification.expire', 60)),
@@ -27,7 +26,7 @@ class CustomVerifyEmail extends VerifyEmail
             ]
         );
 
-        return str_replace(url('/'), $prefix, $temporarySignedURL);
+        return $temporarySignedURL;
     }
 
     public function toMail($notifiable)

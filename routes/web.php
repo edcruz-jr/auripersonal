@@ -5,6 +5,11 @@ use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
+//Controllers de Autenticação
+use App\Http\Controllers\Auth\EmailVerificationNotificationController;
+use App\Http\Controllers\Auth\EmailVerificationPromptController;
+use App\Http\Controllers\Auth\VerifyEmailController;
+
 //Controllers da Administração
 use App\Http\Controllers\Admin\GenderController;
 
@@ -36,6 +41,20 @@ Route::prefix('legal')->name('legal.')->group(function () {
     Route::get('/privacyPolicy', function () {
         return Inertia::render('Legal/PrivacyPolicy');
     })->name('privacy_policy');
+});
+
+// Adicionando as rotas de verificação de e-mail
+Route::middleware(['auth'])->group(function () {
+    Route::get('/verify-email', EmailVerificationPromptController::class)
+        ->name('verification.notice');
+
+    Route::get('/verify-email/{id}/{hash}', VerifyEmailController::class)
+        ->middleware(['signed', 'throttle:6,1'])
+        ->name('verification.verify');
+        
+    Route::post('/email/verification-notification', [EmailVerificationNotificationController::class, 'store'])
+        ->middleware(['throttle:6,1'])
+        ->name('verification.send');
 });
 
 //Adicionando a rota para a página de administração
