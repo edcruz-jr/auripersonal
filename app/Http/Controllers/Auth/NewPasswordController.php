@@ -7,7 +7,7 @@ use Illuminate\Auth\Events\PasswordReset;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Password;
+use Illuminate\Validation\Rules\Password;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rules;
 use Illuminate\Validation\ValidationException;
@@ -24,6 +24,13 @@ class NewPasswordController extends Controller
         return Inertia::render('Auth/ResetPassword', [
             'email' => $request->email,
             'token' => $request->route('token'),
+            'passwordRules' => [
+                'min' => 8,
+                'max' => 100,
+                'mixedCase' => true,
+                'numbers' => true,
+                'symbols' => true,
+            ],
         ]);
     }
 
@@ -37,7 +44,19 @@ class NewPasswordController extends Controller
         $request->validate([
             'token' => 'required',
             'email' => 'required|email',
-            'password' => ['required', 'confirmed', Rules\Password::defaults()],
+            'password' => [
+                'required',
+                'string',
+                'max:100',
+                'different:current_password',
+                'confirmed',
+                Password::min(8)
+                    ->mixedCase()    // pelo menos 1 maiúscula e 1 minúscula
+                    ->letters()      // pelo menos 1 letra
+                    ->numbers()       // pelo menos 1 número
+                    ->symbols()       // pelo menos 1 caractere especial
+                    ->uncompromised(), // verifica vazamento em data breaches (HIBP)
+            ],
         ]);
 
         // Here we will attempt to reset the user's password. If it is successful we
