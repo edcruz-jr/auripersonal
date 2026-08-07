@@ -9,6 +9,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Validation\Rules\Password;
 use Illuminate\Validation\Rules;
 use Illuminate\Validation\ValidationException;
 use Inertia\Inertia;
@@ -44,7 +45,19 @@ class RegisteredUserController extends Controller
             'main_objective_id' => 'required|exists:main_objectives,id',
             'activity_level_id' => 'required|exists:activity_levels,id',
             'dietary_restrictions' => 'nullable|string|max:255',
-            'password' => ['required', 'confirmed', Rules\Password::defaults()]
+            'password' => [
+                'required',
+                'string',
+                'max:100',
+                'different:current_password',
+                'confirmed',
+                Password::min(8)
+                    ->mixedCase()    // pelo menos 1 maiúscula e 1 minúscula
+                    ->letters()      // pelo menos 1 letra
+                    ->numbers()       // pelo menos 1 número
+                    ->symbols()       // pelo menos 1 caractere especial
+                    ->uncompromised(), // verifica vazamento em data breaches (HIBP)
+            ]
         ],
         [
             'full_name.required' => 'O campo nome completo é obrigatório.',
@@ -70,7 +83,7 @@ class RegisteredUserController extends Controller
             'activity_level_id.exists' => 'O nível de atividade selecionado é inválido.',
             'dietary_restrictions.max' => 'O campo restrições alimentares deve ter no máximo :max caracteres.',
             'password.required' => 'O campo senha é obrigatório.',
-            'password.confirmed' => 'A confirmação da senha não corresponde.',
+            'password.confirmed' => 'A confirmação da senha não corresponde.'
         ]);
 
         $user = User::create([

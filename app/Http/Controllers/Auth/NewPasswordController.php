@@ -7,7 +7,8 @@ use Illuminate\Auth\Events\PasswordReset;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Validation\Rules\Password;
+use Illuminate\Validation\Rules\Password as PasswordRule;
+use Illuminate\Support\Facades\Password as PasswordFacade;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rules;
 use Illuminate\Validation\ValidationException;
@@ -48,9 +49,8 @@ class NewPasswordController extends Controller
                 'required',
                 'string',
                 'max:100',
-                'different:current_password',
                 'confirmed',
-                Password::min(8)
+                PasswordRule::min(8)
                     ->mixedCase()    // pelo menos 1 maiúscula e 1 minúscula
                     ->letters()      // pelo menos 1 letra
                     ->numbers()       // pelo menos 1 número
@@ -62,7 +62,7 @@ class NewPasswordController extends Controller
         // Here we will attempt to reset the user's password. If it is successful we
         // will update the password on an actual user model and persist it to the
         // database. Otherwise we will parse the error and return the response.
-        $status = Password::reset(
+        $status = PasswordFacade::reset(
             $request->only('email', 'password', 'password_confirmation', 'token'),
             function ($user) use ($request) {
                 $user->forceFill([
@@ -77,7 +77,7 @@ class NewPasswordController extends Controller
         // If the password was successfully reset, we will redirect the user back to
         // the application's home authenticated view. If there is an error we can
         // redirect them back to where they came from with their error message.
-        if ($status == Password::PASSWORD_RESET) {
+        if ($status == PasswordFacade::PASSWORD_RESET) {
             return redirect()->route('login')->with('status', __($status));
         }
 
